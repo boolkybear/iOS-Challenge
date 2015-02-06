@@ -28,6 +28,7 @@ class CatController: UIViewController {
 		self.catImageView?.layer.masksToBounds = true
 
         // Do any additional setup after loading the view.
+		fetchCategories()
 		fetchCat()
     }
 
@@ -66,10 +67,55 @@ extension CatController
 // Helpers
 extension CatController
 {
+	func fetchCategories() -> [CategoryModel]
+	{
+		var categories = [CategoryModel]()
+		
+		self.downloadProgress?.progress = 0.0
+		UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+		
+		Alamofire.request(Alamofire.Method.GET, "http://thecatapi.com/api/categories/list")
+			.validate()
+			.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
+				dispatch_async(dispatch_get_main_queue()) {
+					self.downloadProgress?.progress = Float(totalBytesExpectedToRead) == 0.0 ? 0.0 : Float(totalBytesRead)/Float(totalBytesExpectedToRead)
+					
+					return
+				}
+				
+				return
+			}
+			.response { (request, _, xmlData, error) in
+				if let xmlData = xmlData as? NSData
+				{
+					if xmlData.length > 0 && error == nil
+					{
+						let parser = NSXMLParser(data: xmlData)
+						let categoryDelegate = CategoryParserDelegate()
+						
+						parser.delegate = categoryDelegate
+						if (parser.parse() && categoryDelegate.isParsed())
+						{
+							for i in 0..<categoryDelegate.count()
+							{
+								categories.append(categoryDelegate[i])
+							}
+						}
+					}
+				}
+				
+				dispatch_async(dispatch_get_main_queue()) {
+					self.downloadProgress?.progress = 0.0
+					UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+				}
+		}
+		
+		return categories
+	}
+	
 	func fetchCat()
 	{
 		self.downloadProgress?.progress = 0.0
-		self.downloadProgress?.hidden = false
 		
 		Alamofire.request(Alamofire.Method.GET, "http://thecatapi.com/api/images/get", parameters: [ "format" : "xml" ])
 			.validate()
@@ -124,7 +170,7 @@ extension CatController
 										}
 										
 										dispatch_async(dispatch_get_main_queue()) {
-											self.downloadProgress?.hidden = true
+											self.downloadProgress?.progress = 0.0
 											UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 										}
 									}

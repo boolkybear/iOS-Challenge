@@ -100,4 +100,71 @@ class CatViewerTests: XCTestCase {
 		
 		XCTAssert(isXMLParsed, "XML has not been parsed correctly")
 	}
+	
+	func testCategoryParse()
+	{
+		var isXMLParsed = false
+		
+		let expectation = expectationWithDescription("http://thecatapi.com/api/categories/list")
+		
+		request(Method.GET, "http://thecatapi.com/api/categories/list")
+			.validate()
+			.response { (request, _, xmlData, error) in
+				if let xmlData = xmlData as? NSData
+				{
+					if xmlData.length > 0 && error == nil
+					{
+						let parser = NSXMLParser(data: xmlData)
+						let categoryDelegate = CategoryParserDelegate()
+						
+						parser.delegate = categoryDelegate
+						XCTAssert(parser.parse(), "XML has not been parsed")
+						XCTAssert(categoryDelegate.isParsed(), "XML has not been parsed")
+						XCTAssert(categoryDelegate.count() > 0, "XML is not correct")
+						
+						let category = categoryDelegate[0]
+						
+						XCTAssert(countElements(category.identifier ?? "") > 0, "Identifier should not be empty")
+						XCTAssert(countElements(category.name ?? "") > 0, "Name should not be empty")
+						
+						isXMLParsed = true
+					}
+				}
+				
+				expectation.fulfill()
+		}
+		
+		waitForExpectationsWithTimeout(10) { (error) in
+			XCTAssertNil(error, "\(error)")
+		}
+		
+		XCTAssert(isXMLParsed, "XML has not been parsed correctly")
+	}
+	
+	func testFetchFail()
+	{
+		var hasFailed = false
+		
+		let expectation = expectationWithDescription("http://thecatapi.com/api/fail")
+		
+		request(Method.GET, "http://thecatapi.com/api/fail")
+			.response { (_, response, _, _) in
+				
+				if let response = response
+				{
+					if response.statusCode == 404
+					{
+						hasFailed = true
+					}
+				}
+				
+				expectation.fulfill()
+		}
+		
+		waitForExpectationsWithTimeout(10) { (error) in
+			XCTAssertNil(error, "\(error)")
+		}
+		
+		XCTAssert(hasFailed, "This call was supposed to return a 404 error")
+	}
 }

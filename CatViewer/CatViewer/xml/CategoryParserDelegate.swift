@@ -8,23 +8,22 @@
 
 import UIKit
 
-class CatParserDelegate: NSObject
-{
+class CategoryParserDelegate: NSObject {
+	
 	private enum Tag: String {
 		case Response = "response"
 		case Data = "data"
-		case Images = "images"
-		case Image = "image"
-		case Url = "url"
+		case Categories = "categories"
+		case Category = "category"
 		case Identifier = "id"
-		case SourceUrl = "source_url"
+		case Name = "name"
 	}
 	
 	private enum ParseStatus {
 		case NotParsed
 		case ParsedResponse
 		case ParsedData
-		case ParsedImages
+		case ParsedCategories
 		case Ok
 		case Error
 		
@@ -38,13 +37,13 @@ class CatParserDelegate: NSObject
 			case .Data:
 				return self == .ParsedResponse ? .ParsedData : .Error
 				
-			case .Images:
-				return self == .ParsedData ? .ParsedImages : .Error
+			case .Categories:
+				return self == .ParsedData ? .ParsedCategories : .Error
 				
-			case .Image:
+			case .Category:
 				switch self
 				{
-				case .ParsedImages:
+				case .ParsedCategories:
 					return .Ok
 					
 				case .Ok:
@@ -57,25 +56,24 @@ class CatParserDelegate: NSObject
 					return .Error
 				}
 				
-			case .Url: fallthrough
 			case .Identifier: fallthrough
-			case .SourceUrl:
+			case .Name:
 				return self == .Ok ? .Ok : .Error
 			}
 		}
 	}
 	
-	private var cats: [CatModel]
+	private var categories: [CategoryModel]
 	
 	// temporary
-	private var temporaryCat: CatModel!
+	private var temporaryCategory: CategoryModel!
 	private var tagStack: Stack<Tag>
 	private var status: ParseStatus
 	
 	override init() {
 		self.tagStack = Stack<Tag>()
 		
-		self.cats = [CatModel]()
+		self.categories = [CategoryModel]()
 		
 		self.status = .NotParsed
 	}
@@ -87,16 +85,16 @@ class CatParserDelegate: NSObject
 	
 	func count() -> Int
 	{
-		return self.cats.count
+		return self.categories.count
 	}
 	
-	subscript(index: Int) -> CatModel
+	subscript(index: Int) -> CategoryModel
 	{
-		return self.cats[index]
+		return self.categories[index]
 	}
 }
 
-extension CatParserDelegate: NSXMLParserDelegate
+extension CategoryParserDelegate: NSXMLParserDelegate
 {
 	func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
 		if let tag = Tag(rawValue: elementName)
@@ -106,21 +104,18 @@ extension CatParserDelegate: NSXMLParserDelegate
 			
 			switch tag
 			{
-			case .Image:
-				self.temporaryCat = CatModel()
-				
-			case .Url:
-				self.temporaryCat.url = ""
+			case .Category:
+				self.temporaryCategory = CategoryModel()
 				
 			case .Identifier:
-				self.temporaryCat.identifier = ""
+				self.temporaryCategory.identifier = ""
 				
-			case .SourceUrl:
-				self.temporaryCat.sourceUrl = ""
+			case .Name:
+				self.temporaryCategory.name = ""
 				
 			case .Response: fallthrough
 			case .Data: fallthrough
-			case .Images:
+			case .Categories:
 				break
 			}
 		}
@@ -134,10 +129,10 @@ extension CatParserDelegate: NSXMLParserDelegate
 	func parser(parser: NSXMLParser!, didEndElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!) {
 		if let tag = Tag(rawValue: elementName)
 		{
-			if tag == .Image
+			if tag == .Category
 			{
-				self.cats.append(self.temporaryCat)
-				self.temporaryCat = nil
+				self.categories.append(self.temporaryCategory)
+				self.temporaryCategory = nil
 			}
 			
 			self.tagStack.pop()
@@ -155,19 +150,16 @@ extension CatParserDelegate: NSXMLParserDelegate
 		{
 			switch currentTag
 			{
-			case .Url:
-				self.temporaryCat.url?.extend(string)
-				
 			case .Identifier:
-				self.temporaryCat.identifier?.extend(string)
+				self.temporaryCategory.identifier?.extend(string)
 				
-			case .SourceUrl:
-				self.temporaryCat.sourceUrl?.extend(string)
+			case .Name:
+				self.temporaryCategory.name?.extend(string)
 				
 			case .Response: fallthrough
 			case .Data: fallthrough
-			case .Images: fallthrough
-			case .Image:
+			case .Categories: fallthrough
+			case .Category:
 				break
 			}
 		}
@@ -179,9 +171,8 @@ extension CatParserDelegate: NSXMLParserDelegate
 		{
 			switch currentTag
 			{
-			case .Url: fallthrough
 			case .Identifier: fallthrough
-			case .SourceUrl:
+			case .Name:
 				if let string = NSString(data: CDATABlock, encoding: NSUTF8StringEncoding)
 				{
 					self.parser(parser, foundCharacters: string)
@@ -189,8 +180,8 @@ extension CatParserDelegate: NSXMLParserDelegate
 				
 			case .Response: fallthrough
 			case .Data: fallthrough
-			case .Images: fallthrough
-			case .Image:
+			case .Categories: fallthrough
+			case .Category:
 				break
 			}
 		}

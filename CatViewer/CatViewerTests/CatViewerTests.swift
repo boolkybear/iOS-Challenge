@@ -2,7 +2,7 @@
 //  CatViewerTests.swift
 //  CatViewerTests
 //
-//  Created by Dylvian on 4/2/15.
+//  Created by Boolky Bear on 4/2/15.
 //  Copyright (c) 2015 ByBDesigns. All rights reserved.
 //
 
@@ -58,5 +58,46 @@ class CatViewerTests: XCTestCase {
 		}
 		
 		XCTAssert(isXMLDownloaded, "XML has not been downloaded")
+	}
+	
+	func testCatParse()
+	{
+		var isXMLParsed = false
+		
+		let expectation = expectationWithDescription("http://thecatapi.com/api/images/get")
+		
+		request(Method.GET, "http://thecatapi.com/api/images/get", parameters: [ "format" : "xml" ])
+			.validate()
+			.response { (request, _, xmlData, error) in
+				if let xmlData = xmlData as? NSData
+				{
+					if xmlData.length > 0 && error == nil
+					{
+						let parser = NSXMLParser(data: xmlData)
+						let catDelegate = CatParserDelegate()
+						
+						parser.delegate = catDelegate
+						XCTAssert(parser.parse(), "XML has not been parsed")
+						XCTAssert(catDelegate.isParsed(), "XML has not been parsed")
+						XCTAssert(catDelegate.count() == 1, "XML is not correct")
+						
+						let cat = catDelegate[0]
+						
+						XCTAssert(countElements(cat.url ?? "") > 0, "URL should not be empty")
+						XCTAssert(countElements(cat.identifier ?? "") > 0, "Identifier should not be empty")
+						XCTAssert(countElements(cat.url ?? "") > 0, "Source Url should not be empty")
+						
+						isXMLParsed = true
+					}
+				}
+				
+				expectation.fulfill()
+		}
+		
+		waitForExpectationsWithTimeout(10) { (error) in
+			XCTAssertNil(error, "\(error)")
+		}
+		
+		XCTAssert(isXMLParsed, "XML has not been parsed correctly")
 	}
 }

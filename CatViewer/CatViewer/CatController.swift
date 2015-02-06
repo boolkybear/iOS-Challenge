@@ -2,7 +2,7 @@
 //  CatController.swift
 //  CatViewer
 //
-//  Created by Dylvian on 4/2/15.
+//  Created by Boolky Bear on 4/2/15.
 //  Copyright (c) 2015 ByBDesigns. All rights reserved.
 //
 
@@ -23,6 +23,9 @@ class CatController: UIViewController {
 	
     override func viewDidLoad() {
         super.viewDidLoad()
+		
+		self.catImageView?.layer.cornerRadius = 150.0
+		self.catImageView?.layer.masksToBounds = true
 
         // Do any additional setup after loading the view.
 		fetchCat()
@@ -56,6 +59,7 @@ extension CatController
 	}
 	
 	@IBAction func nextButtonTouched(sender: AnyObject) {
+		fetchCat()
 	}
 }
 
@@ -64,24 +68,69 @@ extension CatController
 {
 	func fetchCat()
 	{
-		self.downloadProgress.progress = 0.0
-		self.downloadProgress.hidden = false
+		self.downloadProgress?.progress = 0.0
+		self.downloadProgress?.hidden = false
 		
 		Alamofire.request(Alamofire.Method.GET, "http://thecatapi.com/api/images/get", parameters: [ "format" : "xml" ])
 			.validate()
-			.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-				self.downloadProgress?.progress = Float(totalBytesExpectedToRead) == 0.0 ? 0.0 : Float(totalBytesRead)/Float(totalBytesExpectedToRead)
-				
-				return
-			}
-			.responseString { (request, _, xmlData, error) in
-				if let error = error
+			.response { (request, _, xmlData, error) in
+				if let xmlData = xmlData as? NSData
 				{
-					println("Error downloading request \(request): \(error.localizedDescription)")
-				}
-				else
-				{
-					println("Downloaded XML: \(xmlData)")
+					if xmlData.length > 0 && error == nil
+					{
+						let parser = NSXMLParser(data: xmlData)
+						let catDelegate = CatParserDelegate()
+						
+						parser.delegate = catDelegate
+						if (parser.parse() && catDelegate.isParsed() && catDelegate.count() == 1)
+						{
+							let cat = catDelegate[0]
+							
+							dispatch_async(dispatch_get_main_queue()) {
+								self.urlTextField?.text = cat.sourceUrl ?? ""
+								
+								return
+							}
+							
+							if let catImageUrl = cat.url
+							{
+								dispatch_async(dispatch_get_main_queue()) {
+									UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+									
+									return
+								}
+								Alamofire.request(Alamofire.Method.GET, catImageUrl, parameters: [ "format" : "xml" ])
+									.validate()
+									.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
+										dispatch_async(dispatch_get_main_queue()) {
+											self.downloadProgress?.progress = Float(totalBytesExpectedToRead) == 0.0 ? 0.0 : Float(totalBytesRead)/Float(totalBytesExpectedToRead)
+											
+											return
+										}
+										
+										return
+									}
+									.response { (request, _, xmlData, error) in
+										if let xmlData = xmlData as? NSData
+										{
+											if let image = UIImage(data: xmlData)
+											{
+												dispatch_async(dispatch_get_main_queue()) {
+													self.catImageView?.image = image
+													
+													return
+												}
+											}
+										}
+										
+										dispatch_async(dispatch_get_main_queue()) {
+											self.downloadProgress?.hidden = true
+											UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+										}
+									}
+							}
+						}
+					}
 				}
 			}
 		

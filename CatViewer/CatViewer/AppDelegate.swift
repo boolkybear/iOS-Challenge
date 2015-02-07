@@ -106,6 +106,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	        }
 	    }
 	}
+	
+	class func mainContext() -> NSManagedObjectContext?
+	{
+		if let appDelegate = UIApplication.sharedApplication().delegate as? AppDelegate
+		{
+			return appDelegate.managedObjectContext
+		}
+		
+		return nil
+	}
 
 }
 

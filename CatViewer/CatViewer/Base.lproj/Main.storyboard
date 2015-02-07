@@ -21,10 +21,10 @@
             </objects>
             <point key="canvasLocation" x="729" y="145"/>
         </scene>
-        <!--Cat Controller-->
+        <!--Cat viewer-->
         <scene sceneID="Bjc-ks-v30">
             <objects>
-                <viewController id="oNz-tq-qIh" customClass="CatController" customModule="CatViewer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Cat viewer" id="oNz-tq-qIh" customClass="CatController" customModule="CatViewer" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aJa-rJ-4gX"/>
                         <viewControllerLayoutGuide type="bottom" id="Nhf-jN-ziF"/>
@@ -93,7 +93,7 @@
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Bn-z0-cOe">
                                         <rect key="frame" x="79" y="0.0" width="489" height="30"/>
-                                        <state key="normal" title="Category title">
+                                        <state key="normal" title="Any">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -171,12 +171,13 @@
                             <constraint firstItem="bwU-XT-Qjo" firstAttribute="top" secondItem="aJa-rJ-4gX" secondAttribute="bottom" constant="8" id="wSF-Yw-wr6"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="aAi-qZ-mHO"/>
+                    <navigationItem key="navigationItem" title="Cat viewer" id="aAi-qZ-mHO"/>
                     <connections>
                         <outlet property="catImageView" destination="B1p-s9-kfl" id="mu3-oG-Yzt"/>
                         <outlet property="categoryButton" destination="1Bn-z0-cOe" id="Umr-60-YR3"/>
                         <outlet property="downloadProgress" destination="oib-7H-ifM" id="bk6-Th-3Nh"/>
                         <outlet property="favouriteButton" destination="mwv-iA-d3X" id="9lw-Mh-hiW"/>
+                        <outlet property="nextButton" destination="Jpm-Rl-0WB" id="diE-VB-1W7"/>
                         <outlet property="rateButton" destination="DR7-yY-XSi" id="3ka-zT-LnU"/>
                         <outlet property="urlTextField" destination="hUc-uP-3Pe" id="TNi-s4-spH"/>
                     </connections>

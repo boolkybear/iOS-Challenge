@@ -94,6 +94,32 @@ extension CatController
 		}
 	}
 	
+	@IBAction func favouriteButtonTouched(sender: AnyObject) {
+		if let mainContext = AppDelegate.mainContext()
+		{
+			var cat = Cat.catWithIdentifier(currentCat?.identifier, context: mainContext)
+			if cat == nil
+			{
+				cat = Cat.catFromModel(self.currentCat!, context: mainContext)
+			}
+			
+			if let favourite = cat?.favourite
+			{
+				mainContext.deleteObject(favourite)
+			}
+			else
+			{
+				let favourite = Favourite.favouriteInContext(mainContext)
+				cat?.favourite = favourite
+			}
+			
+			if !mainContext.save(nil)
+			{
+				// TODO: log error
+			}
+		}
+	}
+	
 	@IBAction func nextButtonTouched(sender: AnyObject) {
 		fetchCat()
 	}

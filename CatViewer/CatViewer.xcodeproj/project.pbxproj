@@ -11,6 +11,8 @@
 		A723A7061A8639AC00E992E8 /* Category+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A723A7051A8639AC00E992E8 /* Category+Extras.swift */; };
 		A77DC99F1A862BDB0041A760 /* NSManagedObjectContext+misc.m in Sources */ = {isa = PBXBuildFile; fileRef = A77DC99E1A862BDB0041A760 /* NSManagedObjectContext+misc.m */; };
 		A77DC9A01A862BDB0041A760 /* NSManagedObjectContext+misc.m in Sources */ = {isa = PBXBuildFile; fileRef = A77DC99E1A862BDB0041A760 /* NSManagedObjectContext+misc.m */; };
+		A7A2661E1A866771002EDABA /* Cat+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A2661D1A866771002EDABA /* Cat+Extras.swift */; };
+		A7A266201A866A46002EDABA /* Favourite+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A2661F1A866A46002EDABA /* Favourite+Extras.swift */; };
 		A7C84DFB1A854C690029FD7D /* CategoryModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C84DFA1A854C690029FD7D /* CategoryModel.swift */; };
 		A7C84DFD1A854CCF0029FD7D /* CategoryParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C84DFC1A854CCF0029FD7D /* CategoryParserDelegate.swift */; };
 		A7C84DFE1A8552280029FD7D /* CategoryParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7C84DFC1A854CCF0029FD7D /* CategoryParserDelegate.swift */; };
@@ -54,6 +56,8 @@
 		A77DC99D1A862BDB0041A760 /* NSManagedObjectContext+misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObjectContext+misc.h"; path = "CoreData/NSManagedObjectContext+misc.h"; sourceTree = "<group>"; };
 		A77DC99E1A862BDB0041A760 /* NSManagedObjectContext+misc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObjectContext+misc.m"; path = "CoreData/NSManagedObjectContext+misc.m"; sourceTree = "<group>"; };
 		A77DC9A21A862DE30041A760 /* CatViewer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CatViewer-Bridging-Header.h"; path = "CatViewer/CatViewer-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		A7A2661D1A866771002EDABA /* Cat+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Cat+Extras.swift"; path = "CoreData/Cat+Extras.swift"; sourceTree = "<group>"; };
+		A7A2661F1A866A46002EDABA /* Favourite+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Favourite+Extras.swift"; path = "CoreData/Favourite+Extras.swift"; sourceTree = "<group>"; };
 		A7C84DFA1A854C690029FD7D /* CategoryModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryModel.swift; path = models/CategoryModel.swift; sourceTree = "<group>"; };
 		A7C84DFC1A854CCF0029FD7D /* CategoryParserDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CategoryParserDelegate.swift; path = xml/CategoryParserDelegate.swift; sourceTree = "<group>"; };
 		A7C84E001A8556D90029FD7D /* ifNotNil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ifNotNil.swift; sourceTree = "<group>"; };
@@ -211,7 +215,9 @@
 				A77DC99D1A862BDB0041A760 /* NSManagedObjectContext+misc.h */,
 				A77DC99E1A862BDB0041A760 /* NSManagedObjectContext+misc.m */,
 				EFAB22FF1A826A7B00F20DB5 /* Cat.swift */,
+				A7A2661D1A866771002EDABA /* Cat+Extras.swift */,
 				EFAB22FD1A826A7B00F20DB5 /* Favourite.swift */,
+				A7A2661F1A866A46002EDABA /* Favourite+Extras.swift */,
 				EFAB22FB1A826A7B00F20DB5 /* Rate.swift */,
 				EFAB22F91A826A7A00F20DB5 /* BinaryData.swift */,
 				EFAB22F71A826A7A00F20DB5 /* Category.swift */,
@@ -377,6 +383,7 @@
 				EFAB22D51A820DFA00F20DB5 /* CatViewer.xcdatamodeld in Sources */,
 				A7CC956A1A84F0E9001C764D /* CatParserDelegate.swift in Sources */,
 				A77DC99F1A862BDB0041A760 /* NSManagedObjectContext+misc.m in Sources */,
+				A7A266201A866A46002EDABA /* Favourite+Extras.swift in Sources */,
 				EFAB22FE1A826A7B00F20DB5 /* Favourite.swift in Sources */,
 				EFAB22F51A8260B600F20DB5 /* CatController.swift in Sources */,
 				A7C84E011A8556D90029FD7D /* ifNotNil.swift in Sources */,
@@ -387,6 +394,7 @@
 				EFAB22FC1A826A7B00F20DB5 /* Rate.swift in Sources */,
 				EFAB22F81A826A7A00F20DB5 /* Category.swift in Sources */,
 				EFAB22FA1A826A7A00F20DB5 /* BinaryData.swift in Sources */,
+				A7A2661E1A866771002EDABA /* Cat+Extras.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

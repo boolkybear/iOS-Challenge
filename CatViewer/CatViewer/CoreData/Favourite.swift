@@ -11,7 +11,7 @@ import CoreData
 
 class Favourite: NSManagedObject {
 
-    @NSManaged var date: NSDate
-    @NSManaged var cat: NSManagedObject
+    @NSManaged var date: NSDate?
+    @NSManaged var cat: Cat?
 
 }

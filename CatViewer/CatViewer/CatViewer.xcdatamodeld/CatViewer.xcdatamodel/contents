@@ -6,7 +6,7 @@
         <relationship name="catPicture" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Cat" inverseName="picture" inverseEntity="Cat" syncable="YES"/>
         <relationship name="catThumbnail" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Cat" inverseName="thumbnail" inverseEntity="Cat" syncable="YES"/>
     </entity>
-    <entity name="Cat" representedClassName="Cat" syncable="YES">
+    <entity name="Cat" representedClassName="CatViewer.Cat" syncable="YES">
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="sourceUrl" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
@@ -19,7 +19,7 @@
         <attribute name="identifier" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Favourite" representedClassName="Favourite" syncable="YES">
+    <entity name="Favourite" representedClassName="CatViewer.Favourite" syncable="YES">
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="cat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Cat" inverseName="favourite" inverseEntity="Cat" syncable="YES"/>
     </entity>
@@ -29,11 +29,12 @@
     </entity>
     <fetchRequest name="Categories" entity="Category"/>
     <fetchRequest name="CategoryWithIdentifier" entity="Category" predicateString="identifier == $IDENTIFIER"/>
+    <fetchRequest name="CatWithIdentifier" entity="Cat" predicateString="identifier == $IDENTIFIER"/>
     <elements>
         <element name="BinaryData" positionX="-27" positionY="54" width="128" height="103"/>
-        <element name="Cat" positionX="-63" positionY="-18" width="128" height="148"/>
+        <element name="Cat" positionX="-63" positionY="-18" width="128" height="150"/>
         <element name="Category" positionX="-9" positionY="90" width="128" height="75"/>
-        <element name="Favourite" positionX="-36" positionY="36" width="128" height="73"/>
+        <element name="Favourite" positionX="-36" positionY="36" width="128" height="75"/>
         <element name="Rate" positionX="-54" positionY="18" width="128" height="73"/>
     </elements>
 </model>

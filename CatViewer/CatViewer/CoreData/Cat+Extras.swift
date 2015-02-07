@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import ImageIO
+import UIKit
 
 extension Cat
 {
@@ -36,6 +38,40 @@ extension Cat
 		
 		cat?.url = model.url
 		cat?.sourceUrl = model.sourceUrl
+		
+		var imageBinaryData = cat?.picture
+		if imageBinaryData == nil
+		{
+			imageBinaryData = BinaryData.emptyBinaryDataInContext(context)
+			cat?.picture = imageBinaryData
+		}
+		
+		imageBinaryData?.url = model.url
+		imageBinaryData?.data = model.imageData
+		
+		if let imageData = model.imageData
+		{
+			if let imageSource = CGImageSourceCreateWithData(imageData, nil)
+			{
+				let options = [
+					String(kCGImageSourceThumbnailMaxPixelSize): 72.0,
+					String(kCGImageSourceCreateThumbnailFromImageIfAbsent): true
+				]
+				
+				let thumbnailImage = UIImage(CGImage: CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options))
+				let thumbnailData = UIImageJPEGRepresentation(thumbnailImage, 0.75)
+				
+				var thumbnailBinaryData = cat?.thumbnail
+				if thumbnailBinaryData == nil
+				{
+					thumbnailBinaryData = BinaryData.emptyBinaryDataInContext(context)
+					cat?.thumbnail = thumbnailBinaryData
+				}
+				
+				thumbnailBinaryData?.url = cat?.url
+				thumbnailBinaryData?.data = thumbnailData
+			}
+		}
 		
 		return cat
 	}

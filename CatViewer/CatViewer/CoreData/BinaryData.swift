@@ -11,9 +11,9 @@ import CoreData
 
 class BinaryData: NSManagedObject {
 
-    @NSManaged var url: String
-    @NSManaged var data: NSData
-    @NSManaged var catPicture: NSManagedObject
-    @NSManaged var catThumbnail: NSManagedObject
+    @NSManaged var url: String?
+    @NSManaged var data: NSData?
+    @NSManaged var catPicture: Cat?
+    @NSManaged var catThumbnail: Cat?
 
 }

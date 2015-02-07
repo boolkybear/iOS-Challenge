@@ -18,4 +18,16 @@ extension Favourite
 		
 		return favourite
 	}
+	
+	class func favouritesInContext(context: NSManagedObjectContext) -> [Favourite]
+	{
+		if let favourites = context.objectsFromRequestNamed("Favourites", substitution: [ NSObject : AnyObject ](), sortDescriptors: [ NSSortDescriptor(key: "date", ascending: false) ], error: nil)
+		{
+			return favourites.map {
+				$0 as Favourite
+			}
+		}
+		
+		return []
+	}
 }

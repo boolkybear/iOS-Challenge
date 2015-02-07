@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14C109" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="BinaryData" representedClassName="BinaryData" syncable="YES">
+    <entity name="BinaryData" representedClassName="CatViewer.BinaryData" syncable="YES">
         <attribute name="data" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="catPicture" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Cat" inverseName="picture" inverseEntity="Cat" syncable="YES"/>
@@ -30,8 +30,9 @@
     <fetchRequest name="Categories" entity="Category"/>
     <fetchRequest name="CategoryWithIdentifier" entity="Category" predicateString="identifier == $IDENTIFIER"/>
     <fetchRequest name="CatWithIdentifier" entity="Cat" predicateString="identifier == $IDENTIFIER"/>
+    <fetchRequest name="Favourites" entity="Favourite"/>
     <elements>
-        <element name="BinaryData" positionX="-27" positionY="54" width="128" height="103"/>
+        <element name="BinaryData" positionX="-27" positionY="54" width="128" height="105"/>
         <element name="Cat" positionX="-63" positionY="-18" width="128" height="150"/>
         <element name="Category" positionX="-9" positionY="90" width="128" height="75"/>
         <element name="Favourite" positionX="-36" positionY="36" width="128" height="75"/>

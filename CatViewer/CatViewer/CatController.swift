@@ -155,28 +155,32 @@ extension CatController
 						parser.delegate = categoryDelegate
 						if (parser.parse() && categoryDelegate.isParsed())
 						{
-							if let mainContext = AppDelegate.mainContext()
-							{
-								var hasErrors = false
-								for i in 0..<categoryDelegate.count()
+							dispatch_async(dispatch_get_main_queue()) {
+								if let mainContext = AppDelegate.mainContext()
 								{
-									let category = Category.categoryFromModel(categoryDelegate[i], context: mainContext)
-									if category == nil
+									var hasErrors = false
+									for i in 0..<categoryDelegate.count()
+									{
+										let category = Category.categoryFromModel(categoryDelegate[i], context: mainContext)
+										if category == nil
+										{
+											hasErrors = true
+										}
+									}
+									
+									if mainContext.save(nil) == false
 									{
 										hasErrors = true
 									}
+									
+									if hasErrors
+									{
+										// TODO: log error
+										JLToast.makeText(NSLocalizedString("Error saving categories", comment: "Fetching categories")).show()
+									}
 								}
 								
-								if mainContext.save(nil) == false
-								{
-									hasErrors = true
-								}
-								
-								if hasErrors
-								{
-									// TODO: log error
-									JLToast.makeText(NSLocalizedString("Error saving categories", comment: "Fetching categories")).show()
-								}
+								return
 							}
 						}
 					}
@@ -251,6 +255,7 @@ extension CatController
 									.response { (request, _, xmlData, error) in
 										if let xmlData = xmlData as? NSData
 										{
+											self.currentCat?.imageData = xmlData
 											if let image = UIImage(data: xmlData)
 											{
 												dispatch_async(dispatch_get_main_queue()) {

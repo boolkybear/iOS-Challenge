@@ -12,4 +12,6 @@ struct CatModel {
 	var url: String? = nil
 	var identifier: String? = nil
 	var sourceUrl: String? = nil
+	
+	var imageData: NSData? = nil
 }

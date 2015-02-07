@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="FWV-Qa-8ss">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Navigation Controller-->
@@ -253,20 +254,67 @@
             </objects>
             <point key="canvasLocation" x="-37" y="822"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Favourites-->
         <scene sceneID="vJe-wo-GeU">
             <objects>
-                <tableViewController id="jIa-j2-omp" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="We6-Ak-7hW">
+                <tableViewController id="jIa-j2-omp" customClass="FavouriteController" customModule="CatViewer" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="88" sectionHeaderHeight="22" sectionFooterHeight="22" id="We6-Ak-7hW">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="ZWK-n9-hCT">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="favouriteCell" rowHeight="88" id="ZWK-n9-hCT" customClass="FavouriteCell" customModule="CatViewer" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZWK-n9-hCT" id="X9V-PQ-tzc">
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="S6S-n4-IYn">
+                                            <rect key="frame" x="8" y="8" width="72" height="72"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="72" id="UPA-3e-Ryn"/>
+                                                <constraint firstAttribute="width" constant="72" id="md7-05-xR0"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="8"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Favourite since" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3bf-dw-xdK">
+                                            <rect key="frame" x="88" y="8" width="471" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="eUE-il-MDW"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="14"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sGA-16-POo">
+                                            <rect key="frame" x="88" y="37" width="471" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="gUn-bZ-hem"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="S6S-n4-IYn" firstAttribute="top" secondItem="X9V-PQ-tzc" secondAttribute="top" constant="8" id="0dG-11-m0b"/>
+                                        <constraint firstItem="sGA-16-POo" firstAttribute="leading" secondItem="S6S-n4-IYn" secondAttribute="trailing" constant="8" id="48A-94-8Tt"/>
+                                        <constraint firstItem="sGA-16-POo" firstAttribute="top" secondItem="3bf-dw-xdK" secondAttribute="bottom" constant="8" id="7iq-SV-2K2"/>
+                                        <constraint firstItem="S6S-n4-IYn" firstAttribute="leading" secondItem="X9V-PQ-tzc" secondAttribute="leading" constant="8" id="fxn-LH-7Z2"/>
+                                        <constraint firstItem="sGA-16-POo" firstAttribute="trailing" secondItem="X9V-PQ-tzc" secondAttribute="trailingMargin" id="l9c-ne-2Ex"/>
+                                        <constraint firstItem="3bf-dw-xdK" firstAttribute="top" secondItem="X9V-PQ-tzc" secondAttribute="topMargin" id="laa-o7-Gqc"/>
+                                        <constraint firstItem="3bf-dw-xdK" firstAttribute="trailing" secondItem="X9V-PQ-tzc" secondAttribute="trailingMargin" id="sAe-ig-Klp"/>
+                                        <constraint firstItem="3bf-dw-xdK" firstAttribute="leading" secondItem="S6S-n4-IYn" secondAttribute="trailing" constant="8" id="ula-Tr-UgA"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="dateLabel" destination="sGA-16-POo" id="WrD-SE-HVr"/>
+                                    <outlet property="thumbnailImageView" destination="S6S-n4-IYn" id="2go-w6-NdX"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -274,11 +322,11 @@
                             <outlet property="delegate" destination="jIa-j2-omp" id="WK1-aN-kL1"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="unP-cd-0v5"/>
+                    <navigationItem key="navigationItem" title="Favourites" id="unP-cd-0v5"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cqy-Zz-Wm8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1523" y="1510"/>
+            <point key="canvasLocation" x="1523" y="1508"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="p4g-7I-NpO">

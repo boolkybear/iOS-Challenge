@@ -51,6 +51,9 @@
                                         <state key="normal">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <segue destination="JZX-HA-wXF" kind="show" identifier="ViewerPushSegue" id="cMm-50-Xy1"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jpm-Rl-0WB">
                                         <rect key="frame" x="256" y="256" width="44" height="44"/>
@@ -314,6 +317,7 @@
                                 <connections>
                                     <outlet property="dateLabel" destination="sGA-16-POo" id="WrD-SE-HVr"/>
                                     <outlet property="thumbnailImageView" destination="S6S-n4-IYn" id="2go-w6-NdX"/>
+                                    <segue destination="JZX-HA-wXF" kind="show" identifier="ViewerPushSegue" id="dKo-qL-3DO"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -327,6 +331,48 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cqy-Zz-Wm8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1523" y="1508"/>
+        </scene>
+        <!--Viewer Controller-->
+        <scene sceneID="2HA-7n-lSu">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="JZX-HA-wXF" customClass="ViewerController" customModule="CatViewer" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="XjC-L1-9QD"/>
+                        <viewControllerLayoutGuide type="bottom" id="1ea-tO-jAj"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="H68-kI-Djd">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="4" translatesAutoresizingMaskIntoConstraints="NO" id="BCw-mz-2fZ">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Vn-GE-jDV">
+                                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                        <gestureRecognizers/>
+                                    </imageView>
+                                </subviews>
+                                <connections>
+                                    <outlet property="delegate" destination="JZX-HA-wXF" id="qfZ-cp-gKW"/>
+                                </connections>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="BCw-mz-2fZ" firstAttribute="top" secondItem="H68-kI-Djd" secondAttribute="top" id="2Nj-sW-WTg"/>
+                            <constraint firstAttribute="bottom" secondItem="BCw-mz-2fZ" secondAttribute="bottom" id="6z5-8x-mlB"/>
+                            <constraint firstAttribute="trailing" secondItem="BCw-mz-2fZ" secondAttribute="trailing" id="FWg-Rt-dRd"/>
+                            <constraint firstItem="BCw-mz-2fZ" firstAttribute="leading" secondItem="H68-kI-Djd" secondAttribute="leading" id="lnM-yh-tOw"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="catImageView" destination="6Vn-GE-jDV" id="FIZ-xb-PA5"/>
+                        <outlet property="zoomScrollView" destination="BCw-mz-2fZ" id="m31-Lp-zji"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8Fr-ID-N22" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2270" y="827"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="p4g-7I-NpO">
@@ -346,4 +392,7 @@
             <point key="canvasLocation" x="729" y="1505"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="cMm-50-Xy1"/>
+    </inferredMetricsTieBreakers>
 </document>

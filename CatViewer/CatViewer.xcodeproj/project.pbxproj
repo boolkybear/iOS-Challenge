@@ -11,6 +11,7 @@
 		A723A7061A8639AC00E992E8 /* Category+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A723A7051A8639AC00E992E8 /* Category+Extras.swift */; };
 		A77DC99F1A862BDB0041A760 /* NSManagedObjectContext+misc.m in Sources */ = {isa = PBXBuildFile; fileRef = A77DC99E1A862BDB0041A760 /* NSManagedObjectContext+misc.m */; };
 		A77DC9A01A862BDB0041A760 /* NSManagedObjectContext+misc.m in Sources */ = {isa = PBXBuildFile; fileRef = A77DC99E1A862BDB0041A760 /* NSManagedObjectContext+misc.m */; };
+		A79FC13F1A86D649009745C6 /* ViewerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A79FC13E1A86D649009745C6 /* ViewerController.swift */; };
 		A7A2661E1A866771002EDABA /* Cat+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A2661D1A866771002EDABA /* Cat+Extras.swift */; };
 		A7A266201A866A46002EDABA /* Favourite+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A2661F1A866A46002EDABA /* Favourite+Extras.swift */; };
 		A7A266221A866E10002EDABA /* FavouriteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A266211A866E10002EDABA /* FavouriteController.swift */; };
@@ -59,6 +60,7 @@
 		A77DC99D1A862BDB0041A760 /* NSManagedObjectContext+misc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSManagedObjectContext+misc.h"; path = "CoreData/NSManagedObjectContext+misc.h"; sourceTree = "<group>"; };
 		A77DC99E1A862BDB0041A760 /* NSManagedObjectContext+misc.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSManagedObjectContext+misc.m"; path = "CoreData/NSManagedObjectContext+misc.m"; sourceTree = "<group>"; };
 		A77DC9A21A862DE30041A760 /* CatViewer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "CatViewer-Bridging-Header.h"; path = "CatViewer/CatViewer-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		A79FC13E1A86D649009745C6 /* ViewerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewerController.swift; sourceTree = "<group>"; };
 		A7A2661D1A866771002EDABA /* Cat+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Cat+Extras.swift"; path = "CoreData/Cat+Extras.swift"; sourceTree = "<group>"; };
 		A7A2661F1A866A46002EDABA /* Favourite+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Favourite+Extras.swift"; path = "CoreData/Favourite+Extras.swift"; sourceTree = "<group>"; };
 		A7A266211A866E10002EDABA /* FavouriteController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavouriteController.swift; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				EFAB22F41A8260B600F20DB5 /* CatController.swift */,
 				A7A266211A866E10002EDABA /* FavouriteController.swift */,
 				A7A266251A867B9F002EDABA /* FavouriteCell.swift */,
+				A79FC13E1A86D649009745C6 /* ViewerController.swift */,
 				A7CC95681A84F0AF001C764D /* Models */,
 				EFAB22F61A826A3D00F20DB5 /* CoreData */,
 				A7CC956B1A84FB32001C764D /* XML */,
@@ -399,6 +402,7 @@
 				A7C84E011A8556D90029FD7D /* ifNotNil.swift in Sources */,
 				A7CC956F1A85184C001C764D /* Stack.swift in Sources */,
 				EFAB22D21A820DFA00F20DB5 /* AppDelegate.swift in Sources */,
+				A79FC13F1A86D649009745C6 /* ViewerController.swift in Sources */,
 				A7C84DFD1A854CCF0029FD7D /* CategoryParserDelegate.swift in Sources */,
 				EFAB23001A826A7B00F20DB5 /* Cat.swift in Sources */,
 				A7A266221A866E10002EDABA /* FavouriteController.swift in Sources */,

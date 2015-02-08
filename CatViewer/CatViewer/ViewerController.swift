@@ -12,6 +12,8 @@ class ViewerController: UIViewController {
 
 	@IBOutlet var zoomScrollView: UIScrollView!
 	@IBOutlet var catImageView: UIImageView!
+	@IBOutlet var imageHeightConstraint: NSLayoutConstraint!
+	@IBOutlet var imageWidthConstraint: NSLayoutConstraint!
 	
 	var cat: Cat? {
 		didSet {
@@ -27,10 +29,11 @@ class ViewerController: UIViewController {
 	
 	override func viewDidLoad() {
         super.viewDidLoad()
-		
-		// TODO: set image constraints
 
         // Do any additional setup after loading the view.
+		self.imageWidthConstraint?.constant = CGRectGetWidth(self.view.frame)
+		self.imageHeightConstraint?.constant = CGRectGetHeight(self.view.frame)
+		
 		updateCatImageViewWithData(self.cat?.picture?.data ?? self.catModel?.imageData)
     }
 

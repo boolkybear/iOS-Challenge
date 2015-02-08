@@ -403,11 +403,21 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="4" translatesAutoresizingMaskIntoConstraints="NO" id="BCw-mz-2fZ">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Vn-GE-jDV">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6Vn-GE-jDV">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                         <gestureRecognizers/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="600" id="ge5-vu-aZ0"/>
+                                            <constraint firstAttribute="width" constant="600" id="nTa-rD-3ej"/>
+                                        </constraints>
                                     </imageView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="6Vn-GE-jDV" secondAttribute="trailing" id="4xB-X4-fdz"/>
+                                    <constraint firstItem="6Vn-GE-jDV" firstAttribute="top" secondItem="BCw-mz-2fZ" secondAttribute="top" id="Qk2-IY-fod"/>
+                                    <constraint firstAttribute="bottom" secondItem="6Vn-GE-jDV" secondAttribute="bottom" id="g2K-mF-Xvg"/>
+                                    <constraint firstItem="6Vn-GE-jDV" firstAttribute="leading" secondItem="BCw-mz-2fZ" secondAttribute="leading" id="lgc-VV-CLj"/>
+                                </constraints>
                                 <connections>
                                     <outlet property="delegate" destination="JZX-HA-wXF" id="qfZ-cp-gKW"/>
                                 </connections>
@@ -423,6 +433,8 @@
                     </view>
                     <connections>
                         <outlet property="catImageView" destination="6Vn-GE-jDV" id="FIZ-xb-PA5"/>
+                        <outlet property="imageHeightConstraint" destination="ge5-vu-aZ0" id="lq3-Ti-mWw"/>
+                        <outlet property="imageWidthConstraint" destination="nTa-rD-3ej" id="lqB-Cb-ChU"/>
                         <outlet property="zoomScrollView" destination="BCw-mz-2fZ" id="m31-Lp-zji"/>
                     </connections>
                 </viewController>

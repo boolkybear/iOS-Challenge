@@ -200,25 +200,67 @@
         <scene sceneID="WLl-aH-MBo">
             <objects>
                 <tableViewController id="OOE-0F-koQ" customClass="RatingsController" customModule="CatViewer" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="2v8-Xz-TR5">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="88" sectionHeaderHeight="22" sectionFooterHeight="22" id="2v8-Xz-TR5">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="rateCell" id="Vvk-wS-wb8" customClass="RateCell" customModule="CatViewer" customModuleProvider="target">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="rateCell" rowHeight="88" id="Vvk-wS-wb8" customClass="RateCell" customModule="CatViewer" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vvk-wS-wb8" id="DUe-Kf-djI">
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Rate cell" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eKl-Jr-7i3">
-                                            <rect key="frame" x="203" y="12" width="105" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your vote" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="43y-mJ-4DM">
+                                            <rect key="frame" x="88" y="8" width="471" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="21" id="15b-fS-lOh"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="14"/>
+                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="f1N-4B-oC7">
+                                            <rect key="frame" x="8" y="8" width="72" height="72"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="72" id="GtP-97-mqB"/>
+                                                <constraint firstAttribute="width" constant="72" id="IGK-p8-zLG"/>
+                                            </constraints>
+                                            <userDefinedRuntimeAttributes>
+                                                <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                    <integer key="value" value="8"/>
+                                                </userDefinedRuntimeAttribute>
+                                                <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                            </userDefinedRuntimeAttributes>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pCI-qd-lxE" userLabel="Rate Label">
+                                            <rect key="frame" x="88" y="39" width="71" height="42"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="50"/>
                                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Hyn-bE-jcb">
+                                            <rect key="frame" x="0.0" y="85" width="567" height="2"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="2" id="6i2-Ft-PGf"/>
+                                            </constraints>
+                                            <color key="trackTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </progressView>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="43y-mJ-4DM" firstAttribute="leading" secondItem="f1N-4B-oC7" secondAttribute="trailing" constant="8" id="0G4-Zk-XCZ"/>
+                                        <constraint firstItem="f1N-4B-oC7" firstAttribute="top" secondItem="DUe-Kf-djI" secondAttribute="top" constant="8" id="2xk-sN-Ies"/>
+                                        <constraint firstItem="Hyn-bE-jcb" firstAttribute="leading" secondItem="DUe-Kf-djI" secondAttribute="leading" id="94c-Hi-TRH"/>
+                                        <constraint firstAttribute="trailing" secondItem="43y-mJ-4DM" secondAttribute="trailing" constant="8" id="P9Z-xL-MIj"/>
+                                        <constraint firstItem="f1N-4B-oC7" firstAttribute="leading" secondItem="DUe-Kf-djI" secondAttribute="leading" constant="8" id="QeT-Rg-duk"/>
+                                        <constraint firstAttribute="trailing" secondItem="Hyn-bE-jcb" secondAttribute="trailing" id="R3k-h3-EEZ"/>
+                                        <constraint firstAttribute="bottom" secondItem="Hyn-bE-jcb" secondAttribute="bottom" id="e32-Xf-7g8"/>
+                                        <constraint firstItem="43y-mJ-4DM" firstAttribute="top" secondItem="DUe-Kf-djI" secondAttribute="top" constant="8" id="j4t-fm-TyV"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
+                                    <outlet property="catImageView" destination="f1N-4B-oC7" id="1Ig-n4-ZqD"/>
+                                    <outlet property="rateLabel" destination="pCI-qd-lxE" id="YVs-6I-Zx3"/>
+                                    <outlet property="rateProgress" destination="Hyn-bE-jcb" id="HFP-bT-jsu"/>
                                     <segue destination="JZX-HA-wXF" kind="show" identifier="ViewerPushSegue" id="5Gr-NJ-apU"/>
                                 </connections>
                             </tableViewCell>
@@ -232,7 +274,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3fY-jj-RE5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1523" y="821"/>
+            <point key="canvasLocation" x="1523" y="817"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="F8u-2C-9Od">

@@ -10,9 +10,29 @@ import UIKit
 
 class RateCell: UITableViewCell {
 	
+	@IBOutlet var catImageView: UIImageView!
+	@IBOutlet var rateLabel: UILabel!
+	@IBOutlet var rateProgress: UIProgressView!
+	
 	var rate: Rate? {
 		didSet {
-			// TODO: setup UI
+			self.catImageView?.image = nil
+			self.rateLabel?.text = ""
+			self.rateProgress?.progress = 0.0
+			
+			if let rate = self.rate
+			{
+				if let rateNumber = rate.rate?.intValue
+				{
+					self.rateLabel?.text = "\(rateNumber)"
+					self.rateProgress?.progress = Float(rateNumber) / 10.0
+				}
+			}
+			
+			if let thumbnailData = self.rate?.cat?.thumbnail?.data
+			{
+				self.catImageView?.image = UIImage(data: thumbnailData)
+			}
 		}
 	}
 

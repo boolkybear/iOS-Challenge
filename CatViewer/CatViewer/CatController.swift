@@ -161,6 +161,8 @@ extension CatController
 {
 	func fetchCategories()
 	{
+		JLToast.makeText(NSLocalizedString("Fetching categories on first launch", comment: "Fetch categories")).show()
+		
 		self.downloadProgress?.progress = 0.0
 		UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 		

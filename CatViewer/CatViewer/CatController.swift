@@ -66,24 +66,24 @@ extension CatController
 {
 	@IBAction func categoryButtonTouched(sender: AnyObject) {
 		let categoryController = UIAlertController(title: NSLocalizedString("Choose category", comment: "Category chooser title"), message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-		categoryController.addAction(UIAlertAction(title: NSLocalizedString("Any", comment: ""), style: UIAlertActionStyle.Cancel, handler: {
+		categoryController.addAction(UIAlertAction(title: NSLocalizedString("Any", comment: ""), style: UIAlertActionStyle.Cancel) {
 			alertAction in
 			self.currentCategory = .AnyCategory
 			self.categoryButton?.setTitle(NSLocalizedString("Any", comment: ""), forState: .Normal)
 			self.fetchCat()
-		}))
+		})
 		
 		let categories = Category.categoriesInContext(AppDelegate.mainContext()!)
 		categories.map {
 			category in
-			categoryController.addAction(UIAlertAction(title: category.name!, style: UIAlertActionStyle.Default, handler: {
+			categoryController.addAction(UIAlertAction(title: category.name!, style: UIAlertActionStyle.Default) {
 				alertAction in
 				self.currentCategory = .NamedCategory(category.name!)
 				self.categoryButton?.setTitle(category.name!, forState: .Normal)
 				self.fetchCat()
 				
 				return
-			}))
+			})
 		}
 		
 		self.presentViewController(categoryController, animated: true, completion: nil)
@@ -100,11 +100,8 @@ extension CatController
 	@IBAction func favouriteButtonTouched(sender: AnyObject) {
 		if let mainContext = AppDelegate.mainContext()
 		{
-			var cat = Cat.catWithIdentifier(currentCat?.identifier, context: mainContext)
-			if cat == nil
-			{
-				cat = Cat.catFromModel(self.currentCat!, context: mainContext)
-			}
+			var cat = Cat.catWithIdentifier(currentCat?.identifier, context: mainContext) ??
+				Cat.catFromModel(self.currentCat!, context: mainContext)
 			
 			if let favourite = cat?.favourite
 			{
@@ -119,8 +116,39 @@ extension CatController
 			if !mainContext.save(nil)
 			{
 				// TODO: log error
+				JLToast.makeText(NSLocalizedString("Error saving favourite", comment: "DB Error")).show()
 			}
 		}
+	}
+	
+	@IBAction func rateButtonTouched(sender: AnyObject) {
+		let rateController = UIAlertController(title: NSLocalizedString("Rate cat!", comment: "Rating title"), message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
+		
+		for i in reverse(1...10)
+		{
+			rateController.addAction(UIAlertAction(title: "\(i)", style: .Default) {
+				action in
+			
+				if let mainContext = AppDelegate.mainContext()
+				{
+					var cat = Cat.catWithIdentifier(self.currentCat?.identifier, context: mainContext) ??
+						Cat.catFromModel(self.currentCat!, context: mainContext)
+					
+					var rating = cat?.rate ?? Rate.emptyRateInContext(mainContext)
+					
+					rating?.rate = i
+					rating?.cat = cat
+					
+					if !mainContext.save(nil)
+					{
+						// TODO: log error
+						JLToast.makeText(NSLocalizedString("Error saving rating", comment: "DB Error")).show()
+					}
+				}
+			})
+		}
+		
+		self.presentViewController(rateController, animated: true, completion: nil)
 	}
 	
 	@IBAction func nextButtonTouched(sender: AnyObject) {

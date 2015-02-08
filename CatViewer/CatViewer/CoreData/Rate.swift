@@ -11,7 +11,7 @@ import CoreData
 
 class Rate: NSManagedObject {
 
-    @NSManaged var rate: NSNumber
-    @NSManaged var cat: NSManagedObject
+    @NSManaged var rate: NSNumber?
+    @NSManaged var cat: Cat?
 
 }

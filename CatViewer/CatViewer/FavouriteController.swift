@@ -2,11 +2,12 @@
 //  FavouriteController.swift
 //  CatViewer
 //
-//  Created by José Servet Font on 7/2/15.
+//  Created by Boolky Bear on 7/2/15.
 //  Copyright (c) 2015 ByBDesigns. All rights reserved.
 //
 
 import UIKit
+import JLToast
 
 class FavouriteController: UITableViewController {
 
@@ -77,17 +78,29 @@ extension FavouriteController
     }
     */
 
-    /*
     // Override to support editing the table view.
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
             // Delete the row from the data source
-            tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
+			
+			if let favourite = self.fetchedResultsController?.objectAtIndexPath(indexPath) as? Favourite
+			{
+				if let context = favourite.managedObjectContext
+				{
+					context.deleteObject(favourite)
+					
+					if !context.save(nil)
+					{
+						// TODO: log error
+						JLToast.makeText(NSLocalizedString("Error deleting favourite", comment: "DB Error"))
+					}
+				}
+			}
+			
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
 
     /*
     // Override to support rearranging the table view.
@@ -122,7 +135,7 @@ extension FavouriteController
     }
 }
 
-extension FavouriteController: NSFetchedResultsControllerDelegate
+extension RatingsController: NSFetchedResultsControllerDelegate
 {
 	func controllerDidChangeContent(controller: NSFetchedResultsController)
 	{

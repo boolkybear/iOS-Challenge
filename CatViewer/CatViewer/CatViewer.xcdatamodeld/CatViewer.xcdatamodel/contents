@@ -23,7 +23,7 @@
         <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
         <relationship name="cat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Cat" inverseName="favourite" inverseEntity="Cat" syncable="YES"/>
     </entity>
-    <entity name="Rate" representedClassName="Rate" syncable="YES">
+    <entity name="Rate" representedClassName="CatViewer.Rate" syncable="YES">
         <attribute name="rate" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="cat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Cat" inverseName="rate" inverseEntity="Cat" syncable="YES"/>
     </entity>
@@ -31,11 +31,12 @@
     <fetchRequest name="CategoryWithIdentifier" entity="Category" predicateString="identifier == $IDENTIFIER"/>
     <fetchRequest name="CatWithIdentifier" entity="Cat" predicateString="identifier == $IDENTIFIER"/>
     <fetchRequest name="Favourites" entity="Favourite"/>
+    <fetchRequest name="Rates" entity="Rate"/>
     <elements>
         <element name="BinaryData" positionX="-27" positionY="54" width="128" height="105"/>
         <element name="Cat" positionX="-63" positionY="-18" width="128" height="150"/>
         <element name="Category" positionX="-9" positionY="90" width="128" height="75"/>
         <element name="Favourite" positionX="-36" positionY="36" width="128" height="75"/>
-        <element name="Rate" positionX="-54" positionY="18" width="128" height="73"/>
+        <element name="Rate" positionX="-54" positionY="18" width="128" height="75"/>
     </elements>
 </model>

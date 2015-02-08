@@ -69,6 +69,9 @@
                                         <state key="normal" title="*">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="rateButtonTouched:" destination="oNz-tq-qIh" eventType="touchUpInside" id="qIP-AX-4W8"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mwv-iA-d3X">
                                         <rect key="frame" x="256" y="0.0" width="44" height="44"/>
@@ -193,20 +196,31 @@
             </objects>
             <point key="canvasLocation" x="1523" y="145"/>
         </scene>
-        <!--Root View Controller-->
+        <!--Rated cats-->
         <scene sceneID="WLl-aH-MBo">
             <objects>
-                <tableViewController id="OOE-0F-koQ" sceneMemberID="viewController">
+                <tableViewController id="OOE-0F-koQ" customClass="RatingsController" customModule="CatViewer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="2v8-Xz-TR5">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Vvk-wS-wb8">
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="rateCell" id="Vvk-wS-wb8" customClass="RateCell" customModule="CatViewer" customModuleProvider="target">
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Vvk-wS-wb8" id="DUe-Kf-djI">
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Rate cell" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eKl-Jr-7i3">
+                                            <rect key="frame" x="203" y="12" width="105" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="JZX-HA-wXF" kind="show" identifier="ViewerPushSegue" id="5Gr-NJ-apU"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -214,11 +228,11 @@
                             <outlet property="delegate" destination="OOE-0F-koQ" id="m1x-xe-exd"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="vDs-EN-Dgc"/>
+                    <navigationItem key="navigationItem" title="Rated cats" id="vDs-EN-Dgc"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3fY-jj-RE5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1523" y="822"/>
+            <point key="canvasLocation" x="1523" y="821"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="F8u-2C-9Od">
@@ -347,7 +361,7 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" maximumZoomScale="4" translatesAutoresizingMaskIntoConstraints="NO" id="BCw-mz-2fZ">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Vn-GE-jDV">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Vn-GE-jDV">
                                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                         <gestureRecognizers/>
                                     </imageView>
@@ -393,6 +407,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cMm-50-Xy1"/>
+        <segue reference="5Gr-NJ-apU"/>
     </inferredMetricsTieBreakers>
 </document>

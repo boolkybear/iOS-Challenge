@@ -141,6 +141,8 @@ extension CatController
 		if shouldUpdateControls
 		{
 			enableControls(catViewModel.shouldEnableControls)
+			self.favouriteButton?.setImage(catViewModel.favouriteButtonImage(), forState: .Normal)
+			self.rateButton?.setImage(catViewModel.rateButtonImage(), forState: .Normal)
 		}
 		if shouldUpdateModel
 		{

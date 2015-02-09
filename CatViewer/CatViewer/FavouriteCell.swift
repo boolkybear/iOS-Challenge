@@ -2,7 +2,7 @@
 //  FavouriteCell.swift
 //  CatViewer
 //
-//  Created by José Servet Font on 7/2/15.
+//  Created by Boolky Bear on 7/2/15.
 //  Copyright (c) 2015 ByBDesigns. All rights reserved.
 //
 

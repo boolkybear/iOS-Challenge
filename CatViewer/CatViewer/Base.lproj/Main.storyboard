@@ -5,11 +5,11 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
+        <!--Cats-->
         <scene sceneID="6U1-68-iCD">
             <objects>
                 <navigationController id="tuE-l9-XbF" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="history" id="HWW-pc-80I"/>
+                    <tabBarItem key="tabBarItem" title="Cats" image="cat.png" id="HWW-pc-80I"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ztt-Fl-b7d">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -46,36 +46,37 @@
                                             <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
                                         </userDefinedRuntimeAttributes>
                                     </imageView>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hI7-3Y-lvW">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hI7-3Y-lvW">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="300"/>
-                                        <state key="normal">
+                                        <inset key="contentEdgeInsets" minX="5" minY="8" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" image="mag.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <segue destination="JZX-HA-wXF" kind="show" identifier="ViewerPushSegue" id="cMm-50-Xy1"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jpm-Rl-0WB">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jpm-Rl-0WB">
                                         <rect key="frame" x="256" y="256" width="44" height="44"/>
-                                        <state key="normal" title="&gt;">
+                                        <state key="normal" image="next.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="nextButtonTouched:" destination="oNz-tq-qIh" eventType="touchUpInside" id="7Up-zd-iR1"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DR7-yY-XSi">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DR7-yY-XSi">
                                         <rect key="frame" x="0.0" y="256" width="44" height="44"/>
-                                        <state key="normal" title="*">
+                                        <state key="normal" image="starfilled.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
                                             <action selector="rateButtonTouched:" destination="oNz-tq-qIh" eventType="touchUpInside" id="qIP-AX-4W8"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mwv-iA-d3X">
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mwv-iA-d3X">
                                         <rect key="frame" x="256" y="0.0" width="44" height="44"/>
-                                        <state key="normal" title="&lt;3">
+                                        <state key="normal" image="heartfilled.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -139,12 +140,12 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sln-pD-xLd">
-                                        <rect key="frame" x="531" y="0.0" width="37" height="30"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sln-pD-xLd">
+                                        <rect key="frame" x="531" y="3" width="37" height="25"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="37" id="ZAc-jc-mLA"/>
                                         </constraints>
-                                        <state key="normal" title="Copy">
+                                        <state key="normal" image="copy.png">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -278,11 +279,11 @@
             </objects>
             <point key="canvasLocation" x="1523" y="817"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Rated-->
         <scene sceneID="F8u-2C-9Od">
             <objects>
                 <navigationController id="rkJ-N8-zts" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="topRated" id="IlA-3q-Xfs"/>
+                    <tabBarItem key="tabBarItem" title="Rated" image="staroutline.png" id="IlA-3q-Xfs"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="VOE-tI-P1v">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -444,11 +445,11 @@
             </objects>
             <point key="canvasLocation" x="2270" y="827"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Favourites-->
         <scene sceneID="p4g-7I-NpO">
             <objects>
                 <navigationController id="Xz6-qc-NlY" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="favorites" id="i29-fd-UNu"/>
+                    <tabBarItem key="tabBarItem" title="Favourites" image="heartoutline.png" id="i29-fd-UNu"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="cWv-y3-ffb">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -462,6 +463,16 @@
             <point key="canvasLocation" x="729" y="1505"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="cat.png" width="25" height="25"/>
+        <image name="copy.png" width="25" height="25"/>
+        <image name="heartfilled.png" width="25" height="25"/>
+        <image name="heartoutline.png" width="25" height="25"/>
+        <image name="mag.png" width="25" height="17"/>
+        <image name="next.png" width="16" height="25"/>
+        <image name="starfilled.png" width="25" height="24"/>
+        <image name="staroutline.png" width="25" height="25"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="cMm-50-Xy1"/>
     </inferredMetricsTieBreakers>

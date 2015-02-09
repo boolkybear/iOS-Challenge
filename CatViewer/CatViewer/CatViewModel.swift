@@ -80,13 +80,15 @@ class CatViewModel
 		return self.currentCatImage
 	}
 	
-//	func rateButtonImage() -> UIImage
-//	{
-//	}
-//	
-//	func favouriteButtonImage() -> UIImage
-//	{
-//	}
+	func rateButtonImage() -> UIImage
+	{
+		return UIImage(named: self.currentCat?.rate == nil ? "staroutline" : "starfilled")!
+	}
+	
+	func favouriteButtonImage() -> UIImage
+	{
+		return UIImage(named: self.currentCat?.favourite == nil ? "heartoutline" : "heartfilled")!
+	}
 	
 	func sourceUrlText() -> String
 	{
@@ -148,7 +150,7 @@ class CatViewModel
 		{
 			if self.currentCat == nil
 			{
-				var cat = Cat.catWithIdentifier(self.currentCatModel?.identifier, context: mainContext) ??
+				self.currentCat = Cat.catWithIdentifier(self.currentCatModel?.identifier, context: mainContext) ??
 					Cat.catFromModel(self.currentCatModel!, context: mainContext)
 			}
 			
@@ -338,6 +340,9 @@ extension CatViewModel
 		{
 			// TODO: log error
 			JLToast.makeText(NSLocalizedString("Error downloading cat", comment: "Fetching cat")).show()
+			
+			self.shouldEnableControls = true
+			self.updateView?(self, UpdateField.UpdateControls.rawValue)
 		}
 		else
 		{

@@ -29,22 +29,14 @@ extension Cat
 	
 	class func catFromModel(model: CatModel, context: NSManagedObjectContext) -> Cat?
 	{
-		var cat = catWithIdentifier(model.identifier, context: context)
-		if cat == nil
-		{
-			cat = emptyCatInContext(context)
-			cat?.identifier = model.identifier
-		}
-		
+		var cat = catWithIdentifier(model.identifier, context: context) ?? emptyCatInContext(context)
+
+		cat?.identifier = model.identifier
 		cat?.url = model.url
 		cat?.sourceUrl = model.sourceUrl
 		
-		var imageBinaryData = cat?.picture
-		if imageBinaryData == nil
-		{
-			imageBinaryData = BinaryData.emptyBinaryDataInContext(context)
-			cat?.picture = imageBinaryData
-		}
+		var imageBinaryData = cat?.picture ?? BinaryData.emptyBinaryDataInContext(context)
+		cat?.picture = imageBinaryData
 		
 		imageBinaryData?.url = model.url
 		imageBinaryData?.data = model.imageData
@@ -61,13 +53,9 @@ extension Cat
 				let thumbnailImage = UIImage(CGImage: CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options))
 				let thumbnailData = UIImageJPEGRepresentation(thumbnailImage, 0.75)
 				
-				var thumbnailBinaryData = cat?.thumbnail
-				if thumbnailBinaryData == nil
-				{
-					thumbnailBinaryData = BinaryData.emptyBinaryDataInContext(context)
-					cat?.thumbnail = thumbnailBinaryData
-				}
-				
+				var thumbnailBinaryData = cat?.thumbnail ?? BinaryData.emptyBinaryDataInContext(context)
+				cat?.thumbnail = thumbnailBinaryData
+
 				thumbnailBinaryData?.url = cat?.url
 				thumbnailBinaryData?.data = thumbnailData
 			}

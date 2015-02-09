@@ -40,7 +40,7 @@ enum UpdateField: Int
 	case UpdateAll		= 0b001111
 }
 
-typealias UpdateHandler = (Int) -> Void
+typealias UpdateHandler = (CatViewModel, Int) -> Void
 
 class CatViewModel
 {
@@ -58,7 +58,8 @@ class CatViewModel
 	
 	init()
 	{
-		
+		initializeCategories()
+		fetchCat()
 	}
 	
 	func categoryNames() -> [String]
@@ -94,11 +95,76 @@ class CatViewModel
 	
 	func onUpdate(handler: UpdateHandler) -> Self
 	{
-		handler(UpdateField.UpdateAll.rawValue)
+		handler(self, UpdateField.UpdateAll.rawValue)
 		
 		self.updateView = handler
 		
 		return self
+	}
+	
+	// Setters
+	func setCategory(category: CatCategory)
+	{
+		self.currentCategory = category
+		
+		self.updateView?(self, UpdateField.UpdateCategory.rawValue)
+		
+		fetchCat()
+	}
+	
+	func toggleFavourite()
+	{
+		if let mainContext = AppDelegate.mainContext()
+		{
+			if self.currentCat == nil
+			{
+				self.currentCat = Cat.catWithIdentifier(self.currentCatModel?.identifier, context: mainContext) ??
+					Cat.catFromModel(self.currentCatModel!, context: mainContext)
+			}
+			
+			if let favourite = self.currentCat?.favourite
+			{
+				mainContext.deleteObject(favourite)
+			}
+			else
+			{
+				let favourite = Favourite.favouriteInContext(mainContext)
+				self.currentCat?.favourite = favourite
+			}
+			
+			if !mainContext.save(nil)
+			{
+				// TODO: log error
+				JLToast.makeText(NSLocalizedString("Error saving favourite", comment: "DB Error")).show()
+			}
+			
+			self.updateView?(self, UpdateField.UpdateControls.rawValue)
+		}
+	}
+	
+	func rate(rate: Int)
+	{
+		if let mainContext = AppDelegate.mainContext()
+		{
+			if self.currentCat == nil
+			{
+				var cat = Cat.catWithIdentifier(self.currentCatModel?.identifier, context: mainContext) ??
+					Cat.catFromModel(self.currentCatModel!, context: mainContext)
+			}
+			
+			var rating = self.currentCat?.rate ?? Rate.emptyRateInContext(mainContext)
+			
+			rating?.rate = rate
+			rating?.cat = self.currentCat
+			
+			if !mainContext.save(nil)
+			{
+				// TODO: log error
+				JLToast.makeText(NSLocalizedString("Error saving rating", comment: "DB Error")).show()
+			}
+			
+			self.updateView?(self, UpdateField.UpdateControls.rawValue)
+		}
 	}
 }
 
@@ -113,6 +179,13 @@ extension CatViewModel
 			if countElements(categories) == 0
 			{
 				fetchCategories()
+			}
+			else
+			{
+				for category in categories
+				{
+					self.categories.append(.NamedCategory(category.name ?? ""))
+				}
 			}
 		}
 	}
@@ -130,7 +203,7 @@ extension CatViewModel
 				dispatch_async(dispatch_get_main_queue()) {
 					self.currentProgress = Float(totalBytesExpectedToRead) == 0.0 ? 0.0 : Float(totalBytesRead)/Float(totalBytesExpectedToRead)
 					
-					self.updateView?(UpdateField.UpdateProgress.rawValue)
+					self.updateView?(self, UpdateField.UpdateProgress.rawValue)
 				}
 				
 				return
@@ -140,11 +213,7 @@ extension CatViewModel
 				{
 					if xmlData.length > 0 && error == nil
 					{
-						if !self.parseCategoriesFromXmlData(xmlData)
-						{
-							// TODO: log error
-							JLToast.makeText(NSLocalizedString("Error saving categories", comment: "Fetching categories")).show()
-						}
+						self.parseCategoriesFromXmlData(xmlData)
 					}
 				}
 				
@@ -152,17 +221,17 @@ extension CatViewModel
 					self.currentProgress = 0.0
 					UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 					
-					self.updateView?(UpdateField.UpdateProgress.rawValue)
+					self.updateView?(self, UpdateField.UpdateProgress.rawValue)
 				}
 		}
 	}
 	
-	func parseCategoriesFromXmlData(xmlData: NSData) -> Bool
+	func parseCategoriesFromXmlData(xmlData: NSData)
 	{
-		var hasErrors = false
-		
 		let parser = NSXMLParser(data: xmlData)
 		let categoryDelegate = CategoryParserDelegate()
+		
+		var hasErrors = false
 		
 		parser.delegate = categoryDelegate
 		if (parser.parse() && categoryDelegate.isParsed())
@@ -172,29 +241,36 @@ extension CatViewModel
 				{
 					for i in 0..<categoryDelegate.count()
 					{
-						let category = Category.categoryFromModel(categoryDelegate[i], context: mainContext)
+						let categoryModel = categoryDelegate[i]
+						
+						self.categories.append(CatCategory.NamedCategory(categoryModel.name ?? ""))
+						let category = Category.categoryFromModel(categoryModel, context: mainContext)
 						
 						hasErrors = category == nil || hasErrors
 					}
 					
 					hasErrors = !mainContext.save(nil) || hasErrors
+					
+					if hasErrors
+					{
+						// TODO: log error
+						JLToast.makeText(NSLocalizedString("Error saving categories", comment: "Fetching categories")).show()
+					}
+					else
+					{
+						self.updateView?(self, UpdateField.UpdateCategory.rawValue)
+					}
 				}
 				
 				return
 			}
 		}
-		else
-		{
-			hasErrors = true
-		}
-		
-		return hasErrors
 	}
 	
 	func fetchCat()
 	{
 		self.resetValues()
-		self.updateView?(UpdateField.UpdateAll.rawValue)
+		self.updateView?(self, UpdateField.UpdateAll.rawValue)
 		
 		UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 		
@@ -216,19 +292,11 @@ extension CatViewModel
 				{
 					if xmlData.length > 0 && error == nil
 					{
-						if !self.parseCatFromXmlData(xmlData)
-						{
-							// TODO: log error
-							JLToast.makeText(NSLocalizedString("Error fetching cat", comment: "Fetching cat")).show()
-						}
-						else
-						{
-							dispatch_async(dispatch_get_main_queue()) {
-								self.updateView?(UpdateField.UpdateAll.rawValue)
-								
-								return
-							}
-							// TODO: download cat image
+						self.parseCatFromXmlData(xmlData)
+						dispatch_async(dispatch_get_main_queue()) {
+							self.updateView?(self, UpdateField.UpdateAll.rawValue)
+							
+							return
 						}
 					}
 				}
@@ -248,7 +316,7 @@ extension CatViewModel
 		self.shouldEnableControls = false
 	}
 	
-	func parseCatFromXmlData(xmlData: NSData) -> Bool
+	func parseCatFromXmlData(xmlData: NSData)
 	{
 		var hasErrors = false
 		
@@ -259,12 +327,57 @@ extension CatViewModel
 		if (parser.parse() && catDelegate.isParsed() && catDelegate.count() == 1)
 		{
 			self.currentCatModel = catDelegate[0]
+			self.downloadImageFromCatModel()
 		}
 		else
 		{
 			hasErrors = true
 		}
 		
-		return hasErrors
+		if hasErrors
+		{
+			// TODO: log error
+			JLToast.makeText(NSLocalizedString("Error downloading cat", comment: "Fetching cat")).show()
+		}
+		else
+		{
+			self.updateView?(self, UpdateField.UpdateModel.rawValue)
+		}
+	}
+	
+	func downloadImageFromCatModel()
+	{
+		if let catImageUrl = self.currentCatModel?.url
+		{
+			dispatch_async(dispatch_get_main_queue()) {
+				UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+				
+				return
+			}
+			
+			Alamofire.request(Alamofire.Method.GET, catImageUrl)
+				.validate()
+				.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
+					dispatch_async(dispatch_get_main_queue()) {
+						self.currentProgress = Float(totalBytesExpectedToRead) == 0.0 ? 0.0 : Float(totalBytesRead)/Float(totalBytesExpectedToRead)
+						
+						self.updateView?(self, UpdateField.UpdateProgress.rawValue)
+					}
+					
+					return
+				}
+				.response { (request, _, imageData, error) in
+					self.currentCatModel?.imageData = imageData as? NSData
+					
+					dispatch_async(dispatch_get_main_queue()) {
+						self.currentProgress = 0.0
+						self.shouldEnableControls = true
+						
+						self.updateView?(self, UpdateField.UpdateAll.rawValue)
+						
+						UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+					}
+			}
+		}
 	}
 }

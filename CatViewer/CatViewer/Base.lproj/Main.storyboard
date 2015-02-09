@@ -185,11 +185,13 @@
                     <connections>
                         <outlet property="catImageView" destination="B1p-s9-kfl" id="mu3-oG-Yzt"/>
                         <outlet property="categoryButton" destination="1Bn-z0-cOe" id="Umr-60-YR3"/>
+                        <outlet property="copyButton" destination="sln-pD-xLd" id="vuC-aa-9Tz"/>
                         <outlet property="downloadProgress" destination="oib-7H-ifM" id="bk6-Th-3Nh"/>
                         <outlet property="favouriteButton" destination="mwv-iA-d3X" id="9lw-Mh-hiW"/>
                         <outlet property="nextButton" destination="Jpm-Rl-0WB" id="diE-VB-1W7"/>
                         <outlet property="rateButton" destination="DR7-yY-XSi" id="3ka-zT-LnU"/>
                         <outlet property="urlTextField" destination="hUc-uP-3Pe" id="TNi-s4-spH"/>
+                        <outlet property="zoomButton" destination="hI7-3Y-lvW" id="kn5-yd-dJD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="run-5c-L4l" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -461,6 +463,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="5Gr-NJ-apU"/>
+        <segue reference="cMm-50-Xy1"/>
     </inferredMetricsTieBreakers>
 </document>

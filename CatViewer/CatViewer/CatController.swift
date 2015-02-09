@@ -12,12 +12,6 @@ import AlamoFire
 import JLToast
 
 class CatController: UIViewController {
-	
-	enum CatCategory
-	{
-		case AnyCategory
-		case NamedCategory(String)
-	}
 
 	@IBOutlet var downloadProgress: UIProgressView!
 	@IBOutlet var categoryButton: UIButton!
@@ -26,18 +20,21 @@ class CatController: UIViewController {
 	@IBOutlet var rateButton: UIButton!
 	@IBOutlet var favouriteButton: UIButton!
 	@IBOutlet var nextButton: UIButton!
+	@IBOutlet var zoomButton: UIButton!
 	
 	@IBOutlet var urlTextField: UITextField!
+	@IBOutlet var copyButton: UIButton!
 	
 	var currentCat: CatModel? = nil
 	var currentCategory: CatCategory = .AnyCategory
+	
+	var catViewModel: CatViewModel? = nil
 	
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-		initializeCategories()
-		fetchCat()
+		self.catViewModel = CatViewModel().onUpdate(updateFields)
     }
 
     override func didReceiveMemoryWarning() {
@@ -55,7 +52,7 @@ class CatController: UIViewController {
 		if segue.identifier == "ViewerPushSegue"
 		{
 			let viewerController = segue.destinationViewController as ViewerController
-			viewerController.catModel = self.currentCat
+			viewerController.catModel = self.catViewModel?.currentCatModel
 		}
     }
 
@@ -66,21 +63,25 @@ extension CatController
 {
 	@IBAction func categoryButtonTouched(sender: AnyObject) {
 		let categoryController = UIAlertController(title: NSLocalizedString("Choose category", comment: "Category chooser title"), message: nil, preferredStyle: UIAlertControllerStyle.ActionSheet)
-		categoryController.addAction(UIAlertAction(title: NSLocalizedString("Any", comment: ""), style: UIAlertActionStyle.Cancel) {
-			alertAction in
-			self.currentCategory = .AnyCategory
-			self.categoryButton?.setTitle(NSLocalizedString("Any", comment: ""), forState: .Normal)
-			self.fetchCat()
-		})
 		
-		let categories = Category.categoriesInContext(AppDelegate.mainContext()!)
-		categories.map {
-			category in
-			categoryController.addAction(UIAlertAction(title: category.name!, style: UIAlertActionStyle.Default) {
-				alertAction in
-				self.currentCategory = .NamedCategory(category.name!)
-				self.categoryButton?.setTitle(category.name!, forState: .Normal)
-				self.fetchCat()
+		let categories: [CatCategory] = self.catViewModel?.categories ?? [ .AnyCategory ]
+		for category in categories
+		{
+			let actionStyle: UIAlertActionStyle = {
+				switch category
+				{
+				case .AnyCategory:
+					return .Cancel
+					
+				case .NamedCategory(_):
+					return .Default
+				}
+			}()
+			
+			categoryController.addAction(UIAlertAction(title: category.name(), style: actionStyle) {
+				action in
+				
+				self.catViewModel?.setCategory(category)
 				
 				return
 			})
@@ -90,7 +91,7 @@ extension CatController
 	}
 	
 	@IBAction func copyUrlButtonTouched(sender: AnyObject) {
-		if let sourceUrl = self.currentCat?.sourceUrl
+		if let sourceUrl = self.catViewModel?.sourceUrlText()
 		{
 			UIPasteboard.generalPasteboard().string = sourceUrl
 			JLToast.makeText(NSLocalizedString("Copied to pasteboard", comment: "URL copy to pasteboard"), duration: JLToastDelay.ShortDelay).show()
@@ -98,27 +99,7 @@ extension CatController
 	}
 	
 	@IBAction func favouriteButtonTouched(sender: AnyObject) {
-		if let mainContext = AppDelegate.mainContext()
-		{
-			var cat = Cat.catWithIdentifier(currentCat?.identifier, context: mainContext) ??
-				Cat.catFromModel(self.currentCat!, context: mainContext)
-			
-			if let favourite = cat?.favourite
-			{
-				mainContext.deleteObject(favourite)
-			}
-			else
-			{
-				let favourite = Favourite.favouriteInContext(mainContext)
-				cat?.favourite = favourite
-			}
-			
-			if !mainContext.save(nil)
-			{
-				// TODO: log error
-				JLToast.makeText(NSLocalizedString("Error saving favourite", comment: "DB Error")).show()
-			}
-		}
+		self.catViewModel?.toggleFavourite()
 	}
 	
 	@IBAction func rateButtonTouched(sender: AnyObject) {
@@ -128,23 +109,10 @@ extension CatController
 		{
 			rateController.addAction(UIAlertAction(title: "\(i)", style: .Default) {
 				action in
+				
+				self.catViewModel?.rate(i)
 			
-				if let mainContext = AppDelegate.mainContext()
-				{
-					var cat = Cat.catWithIdentifier(self.currentCat?.identifier, context: mainContext) ??
-						Cat.catFromModel(self.currentCat!, context: mainContext)
-					
-					var rating = cat?.rate ?? Rate.emptyRateInContext(mainContext)
-					
-					rating?.rate = i
-					rating?.cat = cat
-					
-					if !mainContext.save(nil)
-					{
-						// TODO: log error
-						JLToast.makeText(NSLocalizedString("Error saving rating", comment: "DB Error")).show()
-					}
-				}
+				return
 			})
 		}
 		
@@ -152,195 +120,50 @@ extension CatController
 	}
 	
 	@IBAction func nextButtonTouched(sender: AnyObject) {
-		fetchCat()
+		self.catViewModel?.fetchCat()
 	}
 }
 
 // Helpers
 extension CatController
 {
-	func fetchCategories()
+	final func updateFields(catViewModel: CatViewModel, updateMask: Int)	// final added as a workaround, otherwise compiler will crash with a signal 11 generating code for this method
 	{
-		JLToast.makeText(NSLocalizedString("Fetching categories on first launch", comment: "Fetch categories")).show()
+		let shouldUpdateCategory: Bool = updateMask & UpdateField.UpdateCategory.rawValue != 0
+		let shouldUpdateControls: Bool = updateMask & UpdateField.UpdateControls.rawValue != 0
+		let shouldUpdateModel: Bool = updateMask & UpdateField.UpdateModel.rawValue != 0
+		let shouldUpdateProgress: Bool = updateMask & UpdateField.UpdateProgress.rawValue != 0
 		
-		self.downloadProgress?.progress = 0.0
-		UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-		
-		Alamofire.request(Alamofire.Method.GET, "http://thecatapi.com/api/categories/list")
-			.validate()
-			.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-				dispatch_async(dispatch_get_main_queue()) {
-					self.downloadProgress?.progress = Float(totalBytesExpectedToRead) == 0.0 ? 0.0 : Float(totalBytesRead)/Float(totalBytesExpectedToRead)
-					
-					return
-				}
-				
-				return
-			}
-			.response { (request, _, xmlData, error) in
-				if let xmlData = xmlData as? NSData
-				{
-					if xmlData.length > 0 && error == nil
-					{
-						let parser = NSXMLParser(data: xmlData)
-						let categoryDelegate = CategoryParserDelegate()
-						
-						parser.delegate = categoryDelegate
-						if (parser.parse() && categoryDelegate.isParsed())
-						{
-							dispatch_async(dispatch_get_main_queue()) {
-								if let mainContext = AppDelegate.mainContext()
-								{
-									var hasErrors = false
-									for i in 0..<categoryDelegate.count()
-									{
-										let category = Category.categoryFromModel(categoryDelegate[i], context: mainContext)
-										if category == nil
-										{
-											hasErrors = true
-										}
-									}
-									
-									if mainContext.save(nil) == false
-									{
-										hasErrors = true
-									}
-									
-									if hasErrors
-									{
-										// TODO: log error
-										JLToast.makeText(NSLocalizedString("Error saving categories", comment: "Fetching categories")).show()
-									}
-								}
-								
-								return
-							}
-						}
-					}
-				}
-				
-				dispatch_async(dispatch_get_main_queue()) {
-					self.downloadProgress?.progress = 0.0
-					UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-				}
-		}
-	}
-	
-	func fetchCat()
-	{
-		self.downloadProgress?.progress = 0.0
-		self.catImageView?.image = nil
-		
-		self.enableUI(false)
-		
-		var parameters = [ "format" : "xml" ]
-		switch currentCategory
+		if shouldUpdateCategory
 		{
-		case .AnyCategory:
-			break
-			
-		case .NamedCategory(let categoryName):
-			parameters["category"] = categoryName
+			self.categoryButton.setTitle(catViewModel.currentCategory.name(), forState: .Normal)
 		}
-		Alamofire.request(Alamofire.Method.GET, "http://thecatapi.com/api/images/get", parameters: parameters)
-			.validate()
-			.response { (request, _, xmlData, error) in
-				
-				var willEnableUI = false
-				
-				if let xmlData = xmlData as? NSData
-				{
-					if xmlData.length > 0 && error == nil
-					{
-						let parser = NSXMLParser(data: xmlData)
-						let catDelegate = CatParserDelegate()
-						
-						parser.delegate = catDelegate
-						if (parser.parse() && catDelegate.isParsed() && catDelegate.count() == 1)
-						{
-							self.currentCat = catDelegate[0]
-							
-							dispatch_async(dispatch_get_main_queue()) {
-								self.urlTextField?.text = self.currentCat?.sourceUrl ?? ""
-								
-								return
-							}
-							
-							if let catImageUrl = self.currentCat?.url
-							{
-								dispatch_async(dispatch_get_main_queue()) {
-									UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-									
-									return
-								}
-								willEnableUI = true
-								Alamofire.request(Alamofire.Method.GET, catImageUrl, parameters: [ "format" : "xml" ])
-									.validate()
-									.progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-										dispatch_async(dispatch_get_main_queue()) {
-											self.downloadProgress?.progress = Float(totalBytesExpectedToRead) == 0.0 ? 0.0 : Float(totalBytesRead)/Float(totalBytesExpectedToRead)
-											
-											return
-										}
-										
-										return
-									}
-									.response { (request, _, xmlData, error) in
-										if let xmlData = xmlData as? NSData
-										{
-											self.currentCat?.imageData = xmlData
-											if let image = UIImage(data: xmlData)
-											{
-												dispatch_async(dispatch_get_main_queue()) {
-													self.catImageView?.image = image
-													
-													return
-												}
-											}
-										}
-										
-										dispatch_async(dispatch_get_main_queue()) {
-											self.downloadProgress?.progress = 0.0
-											UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-											
-											self.enableUI(true)
-										}
-									}
-							}
-						}
-					}
-				}
-				
-				if willEnableUI == false
-				{
-					self.enableUI(true)
-				}
-			}
+		if shouldUpdateControls
+		{
+			enableControls(catViewModel.shouldEnableControls)
+		}
+		if shouldUpdateModel
+		{
+			self.catImageView?.image = catViewModel.catImage()
+			self.urlTextField?.text = catViewModel.sourceUrlText()
+		}
+		if shouldUpdateProgress
+		{
+			self.downloadProgress?.progress = catViewModel.currentProgress
+		}
 		
+		return
 	}
 	
-	func enableUI(enabled: Bool)
+	func enableControls(enabled: Bool)
 	{
+		self.categoryButton?.enabled = enabled
+		
 		self.rateButton?.enabled = enabled
 		self.favouriteButton?.enabled = enabled
 		self.nextButton?.enabled = enabled
-	}
-	
-	func initializeCategories()
-	{
-		if let mainContext = AppDelegate.mainContext()
-		{
-			if let categories = mainContext.objectsFromRequestNamed("Categories", substitution: [NSObject : AnyObject](), sortDescriptors: nil, error: nil)
-			{
-				if countElements(categories) == 0
-				{
-					fetchCategories()
-				}
-			}
-			else
-			{
-				fetchCategories()
-			}
-		}
+		self.zoomButton?.enabled = enabled
+		
+		self.copyButton?.enabled = enabled
 	}
 }
